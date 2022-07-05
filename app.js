@@ -1,11 +1,10 @@
-//jshint esversion:6
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
-const session = require("express-session"); // PP
-const passport = require("passport"); // PP
-const passportLocalMongoose = require("passport-local-mongoose"); // PP
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
 const app = express();
 require("dotenv").config();
 
@@ -16,7 +15,6 @@ mongoose.set("useCreateIndex", true);
 
 app.use(
   session({
-    // PP
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: true,
@@ -25,8 +23,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-// mongodb+srv://admin-akshat:test123@cluster0.puf7o.mongodb.net/manitoraDB?retryWrites=true&w=majority
-// mongoose.connect("mongodb://localhost:27017/manitoraDB",{useNewUrlParser:true,useUnifiedTopology:true});
 mongoose.connect(
   "mongodb+srv://Ankit123:huihuihui@connectin.tf6dy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
   { useNewUrlParser: true }
@@ -60,7 +56,7 @@ const questAndAnswerSchema = new mongoose.Schema({
 
 const Question = mongoose.model("Question", questAndAnswerSchema);
 
-passport.use(User.createStrategy()); // PP
+passport.use(User.createStrategy());
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -235,40 +231,6 @@ app.get("/profile/:userID", function (req, res) {
     res.redirect("/login");
   }
 });
-// app.get("/changepassword",function(req,res)
-// {
-//   var isauth=0;
-//   var currUser;
-//   if(req.isAuthenticated()){
-//     isauth=1;currUser=req.user;
-//   res.render("changepassword",{isauth:isauth,currUser:currUser});
-// } else{
-//   res.redirect("/login");
-// }
-// });
-// app.post("/changepassword",function(req,res){
-//   console.log(req.body);
-//   var username=req.body.username;
-//   var oldpassword=req.body.oldpassword;
-//   var newpassword=req.body.newpassword;
-//   //console.log(username,oldpassword,newpassword);
-//   if(req.isAuthenticated()&&username==currUser.username){
-//     User.find({"username":currUser.username},function(err,user){
-//       console.log(user);
-//        user.changePassword(oldpassword,newpassword,function(err,user){
-//         if(err){
-//           console.log(err);
-//           res.redirect("/changepassword");
-//         } else{
-//           user.save();
-//           res.redirect("/discussion");
-//         }
-//       });
-//     });
-//   } else {
-//     res.redirect("/login");
-//   }
-// });
 app.post("/signup", function (req, res) {
   User.register(
     {
@@ -285,11 +247,6 @@ app.post("/signup", function (req, res) {
         res.redirect("/signup");
       } else {
         passport.authenticate("local")(req, res, function () {
-          //isauth=1;
-          // User.findOne({'username':req.body.username},function(err,foundUser){
-          //   currUser=foundUser;
-          //   //console.log(currUser);
-          // });
           res.redirect("/discussion");
         });
       }
@@ -308,11 +265,6 @@ app.post("/login", function (req, res) {
       res.redirect("login");
     } else {
       passport.authenticate("local")(req, res, function () {
-        // isauth=1;
-        // User.findOne({'username':req.body.username},function(err,foundUser){
-        //   currUser=foundUser;
-        //   //console.log(currUser);
-        // });
         res.redirect("/discussion");
       });
     }
@@ -344,5 +296,5 @@ app.post("/answers/:questionId", function (req, res) {
 });
 
 app.listen(process.env.PORT || 3000, function (req, res) {
-  console.log("Server started at port 3000");
+  console.log(`Server started`);
 });
